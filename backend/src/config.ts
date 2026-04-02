@@ -8,11 +8,13 @@ export interface ApiConfig {
   openaiApiKey?: string;
   defaultProvider: 'anthropic' | 'openai';
   modelPreference: string;
+  language: 'zh' | 'en';
 }
 
 const DEFAULT_CONFIG: ApiConfig = {
   defaultProvider: 'anthropic',
-  modelPreference: 'claude-3-5-sonnet-20241022'
+  modelPreference: 'claude-3-5-sonnet-20241022',
+  language: 'zh'
 };
 
 export function getConfig(): ApiConfig {

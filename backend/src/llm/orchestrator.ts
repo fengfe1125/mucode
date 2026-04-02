@@ -9,8 +9,14 @@ export async function handleChat(messages: any[], onChunk: (chunk: any) => void)
   }
 
   const anthropic = new Anthropic({
-    apiKey: config.anthropicApiKey || 'dummy-key' // Will fail on use if invalid
+    apiKey: config.anthropicApiKey || 'dummy-key'
   });
+
+  const systemPrompt = `You are Mu Code, an expert AI software engineer. 
+    Current language preference: ${config.language === 'zh' ? 'Chinese (简体中文)' : 'English'}.
+    Please always respond and explain in this language.
+    You have access to tools like bash, read_file, write_file, and edit_file.
+    Use them to help the user build and debug software.`;
 
   let currentMessages = [...messages];
   let isDone = false;
@@ -19,6 +25,7 @@ export async function handleChat(messages: any[], onChunk: (chunk: any) => void)
     const stream = anthropic.messages.stream({
       model: config.modelPreference || 'claude-3-5-sonnet-20241022',
       max_tokens: 4096,
+      system: systemPrompt,
       messages: currentMessages,
       tools: tools as any[],
     });
